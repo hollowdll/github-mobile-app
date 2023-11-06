@@ -1,10 +1,16 @@
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import GitHubIcon from '../assets/mark-github.svg';
+import { supabase } from '../supabase/client';
 
 // Login entry point
-// TODO: functionality
 export default function Login() {
+  async function signInWithGithub() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+    })
+  }
+
   return (
     <View style={styles.loginContainer}>
       <GitHubIcon style={{ marginBottom: 20 }} width={64} height={64} />
@@ -23,6 +29,7 @@ export default function Login() {
           marginVertical: 10,
         }}
         titleStyle={{ fontWeight: 'bold' }}
+        onPress={signInWithGithub}
       />
     </View>
   )
