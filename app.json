@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "github-mobile-app",
-    "scheme": "mobile",
+    "scheme": "com.supabase",
     "slug": "github-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",

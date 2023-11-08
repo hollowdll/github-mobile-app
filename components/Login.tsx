@@ -1,49 +1,59 @@
+// Some code is based on this
+// https://supabase.com/docs/guides/auth/native-mobile-deep-linking
+
 import { View, StyleSheet, Alert } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import GitHubIcon from '../assets/mark-github.svg';
+import * as QueryParams from "expo-auth-session/build/QueryParams";
 import { supabase } from '../supabase/client';
-import * as AuthSession from 'expo-auth-session';
-import { useEffect } from 'react';
+import { makeRedirectUri } from 'expo-auth-session';
+import * as WebBrowser from "expo-web-browser";
 
-const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID as string;
-const redirectUri = AuthSession.makeRedirectUri();
+const redirectTo = makeRedirectUri();
 
-// https://docs.expo.dev/guides/authentication/#github
-const discovery = {
-  authorizationEndpoint: 'https://github.com/login/oauth/authorize',
-  tokenEndpoint: 'https://github.com/login/oauth/access_token',
-  revocationEndpoint: `https://github.com/settings/connections/applications/${githubClientId}`,
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+
+  return data.session;
+};
+
+const performOAuth = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "github",
+    options: {
+      scopes: '',
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    console.log("success bro!")
+
+    await createSessionFromUrl(url);
+  }
 };
 
 // OAuth login entry point
 export default function Login() {
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId: githubClientId,
-      scopes: [],
-      redirectUri: redirectUri
-    },
-    discovery
-  );
-  
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { code } = response.params;
-
-      signIn(code);
-    }
-  }, [response]);
-
-  // Sign in by exchanging code for session
-  async function signIn(code: string) {
-    // const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}`;
-
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-    
-    if (error) Alert.alert(`Login failed: ${error.message}`)
-    console.log(data.user?.id);
-  }
-
   return (
     <View style={styles.loginContainer}>
       <GitHubIcon style={{ marginBottom: 20 }} width={64} height={64} />
@@ -62,8 +72,8 @@ export default function Login() {
           marginVertical: 10,
         }}
         titleStyle={{ fontWeight: 'bold' }}
-        onPress={() => promptAsync()}
-        disabled={!request}
+        onPress={performOAuth}
+        // disabled={!request}
       />
     </View>
   )
