@@ -19,9 +19,10 @@ import {
   CloseIcon,
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
-import { GITHUB_API_URL } from "../config/config";
+import { GITHUB_API_URL, GITHUB_API_VERSION } from "../config/config";
 import axios from "axios";
 import { Octokit } from "@octokit/core";
+import { getProviderToken } from "../storage/storage";
 
 export default function Home({ session }: { session: Session }) {
   const [errorMsg, setErrorMsg] = useState('');
@@ -54,15 +55,19 @@ export default function Home({ session }: { session: Session }) {
   }*/
 
   const getUserInfo = async () => {
-    console.log(session.provider_token);
+    const providerToken = await getProviderToken();
+    if (providerToken === undefined) {
+      return setErrorMsg('Failed to get provider token');
+    }
+
     const octokit = new Octokit({
-      auth: session.provider_token
+      auth: providerToken
     })
     
     try {
       const response = await octokit.request('GET /user', {
         headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
+          'X-GitHub-Api-Version': GITHUB_API_VERSION
         }
       });
 

@@ -8,6 +8,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import { supabase } from '../supabase/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as WebBrowser from "expo-web-browser";
+import { storeProviderToken } from '../storage/storage';
 
 const redirectTo = makeRedirectUri();
 
@@ -16,16 +17,17 @@ const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
 
   if (errorCode) throw new Error(errorCode);
-  const { access_token, refresh_token } = params;
+  const { access_token, refresh_token, provider_token } = params;
 
   if (!access_token) return;
+  await storeProviderToken(provider_token);
 
   const { data, error } = await supabase.auth.setSession({
     access_token,
     refresh_token,
   });
   if (error) throw error;
-  console.log("Provider token:", data.session?.provider_token)
+
 
   return data.session;
 };
@@ -37,7 +39,7 @@ const performOAuth = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      scopes: 'user',
+      scopes: 'read:user',
       redirectTo,
       skipBrowserRedirect: true,
     },
