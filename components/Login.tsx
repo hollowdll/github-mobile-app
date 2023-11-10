@@ -11,6 +11,7 @@ import * as WebBrowser from "expo-web-browser";
 
 const redirectTo = makeRedirectUri();
 
+// Extracts tokens in url and creates session.
 const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
 
@@ -28,6 +29,9 @@ const createSessionFromUrl = async (url: string) => {
   return data.session;
 };
 
+// OAuth sign in process.
+// Opens web browser where user can sign in.
+// Redirects back to the app.
 const performOAuth = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
@@ -52,7 +56,14 @@ const performOAuth = async () => {
   }
 };
 
-// OAuth login entry point
+const signIn = async () => {
+  try {
+    await performOAuth();
+  } catch(_) {
+    Alert.alert("Something went wrong and login process failed!");
+  }
+}
+
 export default function Login() {
   return (
     <View style={styles.loginContainer}>
@@ -72,8 +83,7 @@ export default function Login() {
           marginVertical: 10,
         }}
         titleStyle={{ fontWeight: 'bold' }}
-        onPress={performOAuth}
-        // disabled={!request}
+        onPress={signIn}
       />
     </View>
   )
