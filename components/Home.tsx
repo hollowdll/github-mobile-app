@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { supabase } from "../supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -16,23 +16,71 @@ import {
   ButtonGroup,
   Button,
   ButtonText,
-  ButtonIcon,
   CloseIcon,
 } from "@gluestack-ui/themed";
+import { UserInfo } from "../types/user";
+import { GITHUB_API_URL } from "../config/config";
+import axios from "axios";
+import { Octokit } from "@octokit/core";
 
 export default function Home({ session }: { session: Session }) {
+  const [errorMsg, setErrorMsg] = useState('');
   const [msg, setMsg] = useState("You are logged in");
   const [showSignOutDialog, setShowSignOutDialog] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   // Sign out from the current account in the app.
-  async function signOut() {
+  const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) Alert.alert(`Failed to sign out: ${error}`);
   }
 
+  /*
+  const getUserInfo = () => {
+    axios.get(`${GITHUB_API_URL}/user`, {
+      headers: {
+        'Authorization': `Bearer ${session.provider_token ?? ''}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Accept': 'application/vnd.github+json'
+      }
+    })
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(error => {
+      console.error(error);
+      setErrorMsg('Failed to load user info');
+    })
+  }*/
+
+  const getUserInfo = async () => {
+    console.log(session.provider_token);
+    const octokit = new Octokit({
+      auth: session.provider_token
+    })
+    
+    try {
+      const response = await octokit.request('GET /user', {
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      });
+
+      console.log(response);
+    } catch(err) {
+      console.error(err);
+      setErrorMsg('Failed to load user info');
+    }
+  }
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <View style={styles.homeContainer}>
-      <Text style={styles.infoText}>{msg}</Text>
+      <Text>{ errorMsg }</Text>
+      <Text style={styles.infoText}>{ msg }</Text>
       <Button
         action="negative"
         onPress={() => setShowSignOutDialog(true)}

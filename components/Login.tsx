@@ -25,6 +25,7 @@ const createSessionFromUrl = async (url: string) => {
     refresh_token,
   });
   if (error) throw error;
+  console.log("Provider token:", data.session?.provider_token)
 
   return data.session;
 };
@@ -36,7 +37,7 @@ const performOAuth = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      scopes: '',
+      scopes: 'user',
       redirectTo,
       skipBrowserRedirect: true,
     },
