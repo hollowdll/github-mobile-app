@@ -19,10 +19,9 @@ import {
   CloseIcon,
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
-import { GITHUB_API_URL, GITHUB_API_VERSION } from "../config/config";
-import axios from "axios";
+import { GITHUB_API_VERSION } from "../config/config";
 import { Octokit } from "@octokit/core";
-import { getProviderToken } from "../storage/storage";
+import * as storage from "../storage/storage";
 
 export default function Home({ session }: { session: Session }) {
   const [errorMsg, setErrorMsg] = useState('');
@@ -36,26 +35,9 @@ export default function Home({ session }: { session: Session }) {
     if (error) Alert.alert(`Failed to sign out: ${error}`);
   }
 
-  /*
-  const getUserInfo = () => {
-    axios.get(`${GITHUB_API_URL}/user`, {
-      headers: {
-        'Authorization': `Bearer ${session.provider_token ?? ''}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-        'Accept': 'application/vnd.github+json'
-      }
-    })
-    .then(response => {
-      console.log(response.data)
-    })
-    .catch(error => {
-      console.error(error);
-      setErrorMsg('Failed to load user info');
-    })
-  }*/
-
+  // Send GET request to GitHub API to get user info.
   const getUserInfo = async () => {
-    const providerToken = await getProviderToken();
+    const providerToken = await storage.getItem(storage.githubProviderToken);
     if (providerToken === undefined) {
       return setErrorMsg('Failed to get provider token');
     }
