@@ -17,11 +17,13 @@ import {
   Button,
   ButtonText,
   CloseIcon,
+  Spinner,
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
 import { GITHUB_API_VERSION } from "../config/config";
 import { Octokit } from "@octokit/core";
 import * as storage from "../storage/storage";
+import UserInfoView from "./UserInfoView";
 
 export default function Home({ session }: { session: Session }) {
   const [errorMsg, setErrorMsg] = useState('');
@@ -52,8 +54,14 @@ export default function Home({ session }: { session: Session }) {
           'X-GitHub-Api-Version': GITHUB_API_VERSION
         }
       });
-
       console.log(response);
+
+      setUserInfo({
+        id: response.data.id,
+        login: response.data.login,
+        avatarUrl: response.data.avatar_url,
+      });
+
     } catch(err) {
       console.error(err);
       setErrorMsg('Failed to load user info');
@@ -67,7 +75,7 @@ export default function Home({ session }: { session: Session }) {
   return (
     <View style={styles.homeContainer}>
       <Text>{ errorMsg }</Text>
-      <Text style={styles.infoText}>{ msg }</Text>
+      { userInfo != null ? <UserInfoView userInfo={userInfo} /> : <Spinner size="large" /> }
       <Button
         action="negative"
         onPress={() => setShowSignOutDialog(true)}
@@ -122,6 +130,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 20,
   },
 });
