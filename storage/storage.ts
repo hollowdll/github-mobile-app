@@ -1,34 +1,48 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// https://docs.expo.dev/versions/latest/sdk/securestore/
+import * as SecureStore from 'expo-secure-store';
 
 export const githubProviderToken = 'gh-provider-token'
 
 /**
- * Store key-value pair to persistent storage.
+ * Store key-value pair to persistent secure storage.
  * 
  * @param key Key that the stored value uses
  * @param value Value to store
  */
-export const storeItem = async (key: string, value: string) => {
+export const storeItemEncrypted = async (key: string, value: string) => {
   try {
-    await AsyncStorage.setItem(key, value);
+    await SecureStore.setItemAsync(key, value);
   } catch (error) {
-    console.error("Failed to store item to AsyncStorage:", error)
+    console.error("Failed to store item to SecureStorage:", error)
   }
 }
 
 /**
- * Get value from persistent storage using key.
+ * Get value from persistent secure storage using key.
  * 
  * @param key The key the value is stored to.
  * @returns The value if it exists. Otherwise undefined.
  */
-export const getItem = async (key: string) => {
-    try {
-        const value = await AsyncStorage.getItem(key);
-        if (value !== null) {
-            return value
-        }
-    } catch (error) {
-        console.error("Failed to get item from AsycStorage:", error);
+export const getEncryptedItem = async (key: string) => {
+  try {
+    const value = await SecureStore.getItemAsync(key);
+    if (value !== null) {
+      return value
     }
+  } catch (error) {
+    console.error("Failed to get item from SecureStorage:", error);
+  }
+}
+
+/**
+ * Delete value from persistent secure storage using key.
+ * 
+ * @param key The key the value is stored to.
+ */
+export const deleteEncryptedItem = async (key: string) => {
+  try {
+    await SecureStore.deleteItemAsync(key);
+  } catch (error) {
+    console.error("Failed to delete item from SecureStorage:", error);
+  }
 }

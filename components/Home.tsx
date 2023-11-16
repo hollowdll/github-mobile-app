@@ -35,11 +35,13 @@ export default function Home({ session }: { session: Session }) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) Alert.alert(`Failed to sign out: ${error}`);
+
+    await storage.deleteEncryptedItem(storage.githubProviderToken);
   }
 
   // Send GET request to GitHub API to get user info.
   const getUserInfo = async () => {
-    const providerToken = await storage.getItem(storage.githubProviderToken);
+    const providerToken = await storage.getEncryptedItem(storage.githubProviderToken);
     if (providerToken === undefined) {
       return setErrorMsg('Failed to get provider token');
     }

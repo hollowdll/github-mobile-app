@@ -20,7 +20,7 @@ const createSessionFromUrl = async (url: string) => {
   const { access_token, refresh_token, provider_token } = params;
 
   if (!access_token) return;
-  await storage.storeItem(storage.githubProviderToken, provider_token);
+  await storage.storeItemEncrypted(storage.githubProviderToken, provider_token);
 
   const { data, error } = await supabase.auth.setSession({
     access_token,
