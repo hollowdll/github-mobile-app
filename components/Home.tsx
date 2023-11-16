@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import { supabase } from "../supabase/client";
 import { Session } from "@supabase/supabase-js";
 import {
@@ -18,6 +18,7 @@ import {
   ButtonText,
   CloseIcon,
   Spinner,
+  Box,
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
 import { GITHUB_API_VERSION } from "../config/config";
@@ -28,16 +29,7 @@ import UserInfoView from "./UserInfoView";
 export default function Home({ session }: { session: Session }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [msg, setMsg] = useState("You are logged in");
-  const [showSignOutDialog, setShowSignOutDialog] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
-  // Sign out from the current account in the app.
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) Alert.alert(`Failed to sign out: ${error}`);
-
-    await storage.deleteEncryptedItem(storage.githubProviderToken);
-  }
 
   // Send GET request to GitHub API to get user info.
   const getUserInfo = async () => {
@@ -75,50 +67,14 @@ export default function Home({ session }: { session: Session }) {
   }, []);
 
   return (
-    <View style={styles.homeContainer}>
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      h="100%"
+      >
       <Text>{ errorMsg }</Text>
       { userInfo != null ? <UserInfoView userInfo={userInfo} /> : <Spinner size="large" /> }
-      <Button
-        action="negative"
-        onPress={() => setShowSignOutDialog(true)}
-      >
-        <ButtonText>Sign Out</ButtonText>
-      </Button>
-      <AlertDialog
-        isOpen={showSignOutDialog}
-        onClose={() => setShowSignOutDialog(false)}
-      >
-        <AlertDialogBackdrop />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <Heading size="lg">Sign Out</Heading>
-            <AlertDialogCloseButton>
-              <Icon as={CloseIcon} />
-            </AlertDialogCloseButton>
-          </AlertDialogHeader>
-          <AlertDialogBody>
-            <Text size="sm">
-              Sign out from this account? Your session will end and you will be
-              forwarded to the login screen.
-            </Text>
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <ButtonGroup space="lg">
-              <Button
-                variant="outline"
-                action="secondary"
-                onPress={() => setShowSignOutDialog(false)}
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-              <Button bg="$error600" action="negative" onPress={signOut}>
-                <ButtonText>Sign Out</ButtonText>
-              </Button>
-            </ButtonGroup>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </View>
+    </Box>
   );
 }
 

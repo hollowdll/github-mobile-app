@@ -1,7 +1,7 @@
 // Some code is based on this
 // https://supabase.com/docs/guides/auth/native-mobile-deep-linking
 
-import { View, StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import GitHubIcon from '../assets/mark-github.svg';
 import * as QueryParams from "expo-auth-session/build/QueryParams";
@@ -9,6 +9,7 @@ import { supabase } from '../supabase/client';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as WebBrowser from "expo-web-browser";
 import * as storage from '../storage/storage';
+import { Box } from '@gluestack-ui/themed';
 
 const redirectTo = makeRedirectUri();
 
@@ -69,7 +70,11 @@ const signIn = async () => {
 
 export default function Login() {
   return (
-    <View style={styles.loginContainer}>
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      h="100%"
+      >
       <GitHubIcon style={{ marginBottom: 20 }} width={64} height={64} />
       <Text style={styles.infoText}>You need a GitHub account to use this app</Text>
       <Button
@@ -88,7 +93,7 @@ export default function Login() {
         titleStyle={{ fontWeight: 'bold' }}
         onPress={signIn}
       />
-    </View>
+    </Box>
   )
 }
 
