@@ -54,6 +54,7 @@ export default function Home({ session }: { session: Session }) {
         id: response.data.id,
         login: response.data.login,
         avatarUrl: response.data.avatar_url,
+        createdAt: new Date(response.data.created_at),
       });
 
     } catch(err) {
@@ -71,7 +72,7 @@ export default function Home({ session }: { session: Session }) {
       justifyContent="center"
       alignItems="center"
       h="100%"
-      >
+    >
       <Text>{ errorMsg }</Text>
       { userInfo != null ? <UserInfoView userInfo={userInfo} /> : <Spinner size="large" /> }
     </Box>

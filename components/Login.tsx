@@ -74,7 +74,7 @@ export default function Login() {
       justifyContent="center"
       alignItems="center"
       h="100%"
-      >
+    >
       <GitHubIcon style={{ marginBottom: 20 }} width={64} height={64} />
       <Text style={styles.infoText}>You need a GitHub account to use this app</Text>
       <Button

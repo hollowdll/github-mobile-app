@@ -30,14 +30,11 @@ export default function Settings() {
     if (error) Alert.alert(`Failed to sign out: ${error}`);
 
     await storage.deleteEncryptedItem(storage.githubProviderToken);
-  }
+  };
 
   return (
     <Box justifyContent="center" alignItems="center" h="100%">
-      <Button
-        action="negative"
-        onPress={() => setShowSignOutDialog(true)}
-      >
+      <Button action="negative" onPress={() => setShowSignOutDialog(true)}>
         <ButtonText>Sign Out</ButtonText>
       </Button>
       <AlertDialog
