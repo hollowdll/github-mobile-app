@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
+import RepositoryList from './components/RepositoryList';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
             <Drawer.Screen name="Home">
               {(props) => <Home key={session.user.id} session={session} />}
             </Drawer.Screen>
+            <Drawer.Screen name="Repositories" component={RepositoryList} />
             <Drawer.Screen name="Settings" component={Settings} />
           </Drawer.Navigator>
         </NavigationContainer>

@@ -9,6 +9,7 @@ import {
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
 import { StyleSheet } from "react-native";
+import { convertToLocaleDateString } from "../utility/date";
 
 type Props = {
   userInfo: UserInfo;
@@ -16,16 +17,6 @@ type Props = {
 
 // Shows basic information about user
 export default function UserInfoView({ userInfo }: Props) {
-  const convertToLocaleDateString = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-
-    return date.toLocaleDateString('en', options);
-  }
-
   return (
     <Box justifyContent="center" alignItems="center">
       <Avatar size="xl">
