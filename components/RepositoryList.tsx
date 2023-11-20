@@ -10,18 +10,18 @@ import {
   ChevronRightIcon,
   ButtonIcon,
 } from "@gluestack-ui/themed";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, Alert } from "react-native";
 import { Repository } from "../types/repository";
 import React, { useState, useEffect, useRef } from "react";
 import { convertToLocaleDateString } from "../utility/date";
-
-const REPOS_PER_PAGE = 10;
-const DEFAULT_PAGE_NUMBER = 1;
+import * as storage from "../storage/storage";
+import { Octokit } from "@octokit/core";
+import { REPOS_PER_PAGE, DEFAULT_REPO_PAGE_NUMBER } from "../utility/const";
 
 // Shows user repositories
 export default function RepositoryList() {
   const [repositories, setRepositories] = useState<Repository[]>([]);
-  const [page, setPage] = useState(DEFAULT_PAGE_NUMBER);
+  const [page, setPage] = useState(DEFAULT_REPO_PAGE_NUMBER);
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -77,19 +77,19 @@ export default function RepositoryList() {
     );
   }
 
-  // User goes to previous page
+  // Go to previous page
   const handleOnPreviousPage = () => {
     if (page === 2) setPage1Repos();
     else if (page === 3) setPage2Repos();
     else if (page === 4) setPage3Repos();
 
-    if (page <= DEFAULT_PAGE_NUMBER) setPage(DEFAULT_PAGE_NUMBER)
+    if (page <= DEFAULT_REPO_PAGE_NUMBER) setPage(DEFAULT_REPO_PAGE_NUMBER)
     else setPage(page => page - 1);
 
     scrollToTop();
   }
 
-  // User goes to next page
+  // Go to next page
   const handleOnNextPage = () => {
     if (page === 1) setPage2Repos()
     else if (page === 2) setPage3Repos();
@@ -120,7 +120,7 @@ export default function RepositoryList() {
           </Box>
         ))}
         <HStack mt="$4" space="md" justifyContent="space-between">
-          <Button isDisabled={page === DEFAULT_PAGE_NUMBER} onPress={handleOnPreviousPage}>
+          <Button isDisabled={page === DEFAULT_REPO_PAGE_NUMBER} onPress={handleOnPreviousPage}>
             <ButtonIcon as={ChevronLeftIcon} />
             <ButtonText> Previous</ButtonText>
           </Button>

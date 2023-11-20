@@ -21,7 +21,7 @@ import {
   Box,
 } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
-import { GITHUB_API_VERSION } from "../config/config";
+import { GITHUB_API_VERSION } from "../utility/const"
 import { Octokit } from "@octokit/core";
 import * as storage from "../storage/storage";
 import UserInfoView from "./UserInfoView";

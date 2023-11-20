@@ -12,11 +12,13 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import RepositoryList from './components/RepositoryList';
+import { UserInfo } from './types/user';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
