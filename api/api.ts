@@ -39,7 +39,6 @@ export const getUserInfo = async () => {
     } as UserInfo;
 
   } catch (err) {
-    console.error(err);
     throw err;
   }
 }
@@ -73,7 +72,6 @@ export const getUserRepositories = async (username: string, page: number) => {
     });
 
   } catch (err) {
-    console.error(err);
     throw err;
   }
 }

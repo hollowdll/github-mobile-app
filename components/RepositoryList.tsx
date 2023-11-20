@@ -14,8 +14,6 @@ import { ScrollView, StyleSheet, Alert } from "react-native";
 import { Repository } from "../types/repository";
 import React, { useState, useEffect, useRef } from "react";
 import { convertToLocaleDateString } from "../utility/date";
-import * as storage from "../storage/storage";
-import { Octokit } from "@octokit/core";
 import { REPOS_PER_PAGE, DEFAULT_REPO_PAGE_NUMBER } from "../utility/const";
 
 // Shows user repositories
