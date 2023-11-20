@@ -4,6 +4,12 @@ import {
   Heading,
   HStack,
   VStack,
+  Button,
+  ButtonText,
+  ScrollView,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ButtonIcon,
 } from "@gluestack-ui/themed";
 import { FlatList } from "react-native";
 import { StyleSheet } from "react-native";
@@ -35,26 +41,30 @@ export default function RepositoryList() {
 
   return (
     <Box m="$3">
-      <FlatList
-        data={repositories}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Box
-            borderBottomWidth="$1"
-            py="$2"
-            borderColor="$trueGray800"
-          >
+      <ScrollView>
+        {repositories.map((item, index) => (
+          <Box borderBottomWidth="$1" py="$2" borderColor="$trueGray800" key={item.id}>
             <HStack space="md" justifyContent="space-between">
               <VStack>
-                <Heading>{ item.name }</Heading>
-                <Text style={styles.info}>{ item.description }</Text>
-                <Text>Created: { convertToLocaleDateString(item.createdAt) }</Text>
-                <Text>Most used language: { item.language }</Text>
+                <Heading>{item.name}</Heading>
+                <Text style={styles.info}>{item.description}</Text>
+                <Text>Created: {convertToLocaleDateString(item.createdAt)}</Text>
+                <Text>Most used language: {item.language}</Text>
               </VStack>
             </HStack>
           </Box>
-        )}
-      />
+        ))}
+        <HStack mt="$4" space="md" justifyContent="space-between">
+          <Button>
+            <ButtonIcon as={ChevronLeftIcon} />
+            <ButtonText> Previous</ButtonText>
+          </Button>
+          <Button>
+            <ButtonText>Next </ButtonText>
+            <ButtonIcon as={ChevronRightIcon} />
+          </Button>
+        </HStack>
+      </ScrollView>
     </Box>
   );
 }
