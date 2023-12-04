@@ -53,7 +53,9 @@ export default function App() {
             <Drawer.Screen name="Home">
               {(props) => <Home key={session.user.id} session={session} userInfo={userInfo} />}
             </Drawer.Screen>
-            <Drawer.Screen name="Repositories" component={RepositoryList} />
+            <Drawer.Screen name="Repositories">
+              {(props) => <RepositoryList key={session.user.id} userInfo={userInfo} />}
+            </Drawer.Screen>
             <Drawer.Screen name="Settings" component={Settings} />
           </Drawer.Navigator>
         </NavigationContainer>

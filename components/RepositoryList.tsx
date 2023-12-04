@@ -15,9 +15,15 @@ import { Repository } from "../types/repository";
 import React, { useState, useEffect, useRef } from "react";
 import { convertToLocaleDateString } from "../utility/date";
 import { REPOS_PER_PAGE, DEFAULT_REPO_PAGE_NUMBER } from "../utility/const";
+import { UserInfo } from "../types/user";
+import { getUserRepositories } from '../api/api';
+
+type Props = {
+  userInfo: UserInfo | null,
+}
 
 // Shows user repositories
-export default function RepositoryList() {
+export default function RepositoryList({ userInfo }: Props) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [page, setPage] = useState(DEFAULT_REPO_PAGE_NUMBER);
   const [isNextDisabled, setIsNextDisabled] = useState(true);
@@ -76,30 +82,49 @@ export default function RepositoryList() {
   }
 
   // Go to previous page
-  const handleOnPreviousPage = () => {
+  const handleOnPreviousPage = async () => {
+    /*
     if (page === 2) setPage1Repos();
     else if (page === 3) setPage2Repos();
     else if (page === 4) setPage3Repos();
+    */
 
     if (page <= DEFAULT_REPO_PAGE_NUMBER) setPage(DEFAULT_REPO_PAGE_NUMBER)
     else setPage(page => page - 1);
+
+    if (userInfo !== null) {
+      const repos = await getUserRepositories(
+        userInfo.login,
+        page > DEFAULT_REPO_PAGE_NUMBER ? page - 1 : DEFAULT_REPO_PAGE_NUMBER
+      );
+      setRepositories(repos);
+    }
 
     scrollToTop();
   }
 
   // Go to next page
-  const handleOnNextPage = () => {
+  const handleOnNextPage = async () => {
+    /*
     if (page === 1) setPage2Repos()
     else if (page === 2) setPage3Repos();
+    */
 
     setPage(page => page + 1);
+
+    if (userInfo !== null) {
+      const repos = await getUserRepositories(userInfo.login, page + 1);
+      setRepositories(repos);
+    }
 
     scrollToTop();
   }
 
-  // test data
   useEffect(() => {
-    setPage1Repos();
+    if (userInfo !== null) {
+      getUserRepositories(userInfo.login, 1)
+        .then(repos => setRepositories(repos))
+    }
   }, []);
 
   return (

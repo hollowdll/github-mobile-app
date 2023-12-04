@@ -29,7 +29,7 @@ export const getUserInfo = async () => {
         'X-GitHub-Api-Version': GITHUB_API_VERSION
       }
     });
-    console.log(response);
+    // console.log(response);
 
     return {
       id: response.data.id,
@@ -59,7 +59,7 @@ export const getUserRepositories = async (username: string, page: number) => {
         'X-GitHub-Api-Version': GITHUB_API_VERSION
       }
     });
-    console.log(response);
+    // console.log(response);
 
     return response.data.map(item => {
       return {
