@@ -28,7 +28,8 @@ export default function UserInfoView({ userInfo }: Props) {
         />
       </Avatar>
       <Heading size="xl">Hello 👋, {userInfo.login}</Heading>
-      <Text style={styles.info}>Your GitHub ID is {userInfo.id}</Text>
+      <Text style={styles.info}>Name: {userInfo.name}</Text>
+      <Text style={styles.info}>GitHub ID: {userInfo.id}</Text>
       <Text style={styles.info}>Joined: { convertToLocaleDateString(userInfo.createdAt) }</Text>
     </Box>
   );

@@ -34,6 +34,7 @@ export const getUserInfo = async () => {
     return {
       id: response.data.id,
       login: response.data.login,
+      name: response.data.name,
       avatarUrl: response.data.avatar_url,
       createdAt: new Date(response.data.created_at),
     } as UserInfo;
