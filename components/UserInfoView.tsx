@@ -20,14 +20,14 @@ export default function UserInfoView({ userInfo }: Props) {
   return (
     <Box justifyContent="center" alignItems="center">
       <Avatar size="xl">
-        <AvatarFallbackText>Avatar</AvatarFallbackText>
+        <AvatarFallbackText></AvatarFallbackText>
         <AvatarImage
           source={{
             uri: userInfo.avatarUrl,
           }}
         />
       </Avatar>
-      <Heading size="xl">Hello 👋, {userInfo.login}</Heading>
+      <Heading size="2xl" style={{ marginBottom: 10 }}>Hello 👋, {userInfo.login}</Heading>
       <Text style={styles.info}>Name: {userInfo.name}</Text>
       <Text style={styles.info}>GitHub ID: {userInfo.id}</Text>
       <Text style={styles.info}>Joined: { convertToLocaleDateString(userInfo.createdAt) }</Text>
@@ -38,6 +38,7 @@ export default function UserInfoView({ userInfo }: Props) {
 const styles = StyleSheet.create({
   info: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
+    marginTop: 5,
   },
 });
