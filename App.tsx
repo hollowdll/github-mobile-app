@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
 import { StyleSheet, Alert } from "react-native";
 import { Session } from "@supabase/supabase-js";
@@ -33,6 +32,7 @@ export default function App() {
     supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
 
+      // Update user info if session exists
       if (session !== null) {
         try {
           const userInfo = await getUserInfo();
@@ -51,7 +51,7 @@ export default function App() {
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen name="Home">
-              {(props) => <Home key={session.user.id} session={session} userInfo={userInfo} />}
+              {(props) => <Home key={session.user.id} userInfo={userInfo} />}
             </Drawer.Screen>
             <Drawer.Screen name="Repositories">
               {(props) => <RepositoryList key={session.user.id} userInfo={userInfo} />}

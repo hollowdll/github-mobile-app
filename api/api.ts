@@ -37,6 +37,9 @@ export const getUserInfo = async () => {
       name: response.data.name,
       avatarUrl: response.data.avatar_url,
       createdAt: new Date(response.data.created_at),
+      followers: response.data.followers,
+      following: response.data.following,
+      publicRepos: response.data.public_repos,
     } as UserInfo;
 
   } catch (err) {

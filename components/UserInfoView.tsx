@@ -31,6 +31,9 @@ export default function UserInfoView({ userInfo }: Props) {
       <Text style={styles.info}>Name: {userInfo.name}</Text>
       <Text style={styles.info}>GitHub ID: {userInfo.id}</Text>
       <Text style={styles.info}>Joined: { convertToLocaleDateString(userInfo.createdAt) }</Text>
+      <Text style={styles.info}>Followers: {userInfo.followers}</Text>
+      <Text style={styles.info}>Following: {userInfo.following}</Text>
+      <Text style={styles.info}>Public repos: {userInfo.publicRepos}</Text>
     </Box>
   );
 }

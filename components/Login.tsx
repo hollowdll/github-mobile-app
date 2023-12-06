@@ -11,7 +11,6 @@ import * as WebBrowser from "expo-web-browser";
 import * as storage from "../storage/storage";
 import { Box } from "@gluestack-ui/themed";
 import { UserInfo } from "../types/user";
-import { getUserInfo } from "../api/api";
 
 const redirectTo = makeRedirectUri();
 

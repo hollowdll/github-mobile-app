@@ -20,7 +20,6 @@ import { supabase } from "../supabase/client";
 import * as storage from "../storage/storage";
 import { useState } from "react";
 
-// Shows basic information about user
 export default function Settings() {
   const [showSignOutDialog, setShowSignOutDialog] = useState(false);
 

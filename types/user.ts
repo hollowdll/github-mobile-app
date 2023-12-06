@@ -4,4 +4,7 @@ export interface UserInfo {
     name: string,
     avatarUrl: string,
     createdAt: Date,
+    followers: number,
+    following: number,
+    publicRepos: number,
 }
