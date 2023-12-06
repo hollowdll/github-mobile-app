@@ -2,6 +2,8 @@
 
 Mobile app to view GitHub account information and repositories.
 
+![Login screen](docs/login.JPG)
+
 ## Features
 
 - Sign in with GitHub using OAuth2 flow
