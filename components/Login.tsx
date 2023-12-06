@@ -38,6 +38,8 @@ export default function Login({ updateUser }: Props) {
     });
     if (error) throw error;
 
+    console.log("Login success!");
+
     return data.session;
   };
 
@@ -62,8 +64,6 @@ export default function Login({ updateUser }: Props) {
 
     if (res.type === "success") {
       const { url } = res;
-      console.log("success bro!");
-
       await createSessionFromUrl(url);
     }
   };

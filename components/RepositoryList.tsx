@@ -88,7 +88,7 @@ export default function RepositoryList({ userInfo }: Props) {
                 <Text>
                   Created: {convertToLocaleDateString(item.createdAt)}
                 </Text>
-                <Text>Most used language: {item.language}</Text>
+                <Text>Main language: {item.language}</Text>
               </VStack>
             </HStack>
           </Box>
