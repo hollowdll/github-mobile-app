@@ -23,3 +23,4 @@ When user has signed in, the GitHub API access token gets saved to the device as
 - Octokit GitHub API client (make network requests to GitHub API)
 - Expo secure store (encrypted key-value pairs)
 - Gluestack UI components
+- React Native Elements components

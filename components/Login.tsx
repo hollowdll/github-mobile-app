@@ -15,8 +15,8 @@ import { UserInfo } from "../types/user";
 const redirectTo = makeRedirectUri();
 
 type Props = {
-  updateUser: (user: UserInfo | null) => void,
-}
+  updateUser: (user: UserInfo | null) => void;
+};
 
 export default function Login({ updateUser }: Props) {
   // Extracts tokens in url and creates session.
