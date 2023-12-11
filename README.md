@@ -18,9 +18,9 @@ When user has signed in, the GitHub API access token gets saved to the device as
 
 ## Technologies
 
+- Expo and React Native
 - TypeScript
-- React Native
-- Supabase (OAuth2 authorization)
+- Supabase (OAuth2)
 - GitHub API (fetch user and repository data)
 - Octokit GitHub API client (make network requests to GitHub API)
 - Expo secure store (encrypted key-value pairs)
